@@ -95,3 +95,38 @@ CurrentAccountService --> AccountRepository
 @enduml
 
 
++---------------------+         1        *     +----------------------+
+|       Advisor       |------------------------|        Client        |
++---------------------+                       +----------------------+
+| id : Long           |                       | id : Long            |
+| name : String       |                       | name : String        |
+| clients : List<>    |                       | surname : String     |
++---------------------+                       | adress : String      |
+| city : String        |
+| phoneNumber : String |
+| advisor : Advisor    |
+| accounts : List<>    |
++----------------------+
+|
+| 1
+|
+| *
++----------------------+
+|       Account        |
++----------------------+
+| id : Long            |
+| accountNumber:String |
+| balance: BigDecimal  |
+| creationDate : Date  |
+| client : Client      |
++----------------------+
+^
+|
+|
++---------------------------+--------------------------+
+|                                                          |
++----------------------------+                            +-----------------------------+
+|       CurrentAccount       |                            |      SavingAccount (opt)    |
++----------------------------+                            +-----------------------------+
+| overdraft : BigDecimal     |                            | interestRate : BigDecimal   |
++----------------------------+                            +-----------------------------+

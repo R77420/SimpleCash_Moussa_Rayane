@@ -1,0 +1,272 @@
+openapi: 3.0.3
+info:
+  title: SimpleCash API
+  description: Banking API for advisors, clients and accounts management.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+
+  /api/advisors:
+    post:
+      summary: Create an advisor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Advisor'
+      responses:
+        '200':
+          description: Advisor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advisor'
+
+    put:
+      summary: Update an advisor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Advisor'
+      responses:
+        '200':
+          description: Advisor updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advisor'
+
+  /api/advisors/{id}:
+    get:
+      summary: Get advisor by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Advisor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advisor'
+
+    delete:
+      summary: Delete advisor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Advisor deleted
+
+  /api/clients/{advisorId}:
+    post:
+      summary: Create a client for an advisor
+      parameters:
+        - name: advisorId
+          in: path
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '200':
+          description: Client created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+
+  /api/clients/{id}:
+    get:
+      summary: Get client by id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Client found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+
+    put:
+      summary: Update client information
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '200':
+          description: Client updated
+
+    delete:
+      summary: Delete client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Client deleted
+
+  /api/accounts/current/{clientId}:
+    post:
+      summary: Create a current account for client
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentAccount'
+
+  /api/accounts/{accountNumber}/add:
+    post:
+      summary: Add money to account
+      parameters:
+        - in: path
+          name: accountNumber
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoneyRequest'
+      responses:
+        '200':
+          description: Money added
+
+  /api/accounts/{accountNumber}/remove:
+    post:
+      summary: Withdraw money from account
+      parameters:
+        - in: path
+          name: accountNumber
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoneyRequest'
+      responses:
+        '200':
+          description: Money removed
+
+  /api/transfers:
+    post:
+      summary: Transfer money between accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer completed
+
+components:
+  schemas:
+
+    Advisor:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        clients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Client'
+
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        surname:
+          type: string
+        adress:
+          type: string
+        city:
+          type: string
+        phoneNumber:
+          type: string
+
+    CurrentAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+        accountNumber:
+          type: string
+        balance:
+          type: number
+        overdraft:
+          type: number
+
+    MoneyRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 100.0
+
+    TransferRequest:
+      type: object
+      properties:
+        sourceAccount:
+          type: string
+        destinationAccount:
+          type: string
+        amount:
+          type: number
+          example: 50.0
