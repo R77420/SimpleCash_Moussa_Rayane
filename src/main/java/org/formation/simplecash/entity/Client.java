@@ -24,7 +24,7 @@ public class Client {
     @ManyToOne
     private Advisor advisor;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Account> accounts = new ArrayList<>();
 
     public Client(String name, String surname, String adress, String code, String city, String phoneNumber) {
